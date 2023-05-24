@@ -30,12 +30,21 @@ app.post('/', (req, res) => {
         Description: req.body.description
     })
     makeList.save().then(() => {
+        console.log('added')
         res.redirect('http://localhost:3000')
     });
 })
 
-app.get('/update', (req, res) => {
-    User.find({})
+app.get('/update', async (req, res) => {
+    try {
+        const allUser = await User.find({})
+        res.status(200).send(allUser)
+        console.log(allUser)
+    } catch (err) {
+        console.log(err)
+        res.status(500).send()
+    }
+    
 })
 
 app.listen(port, () => {
