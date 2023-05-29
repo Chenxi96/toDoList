@@ -10,6 +10,7 @@ const url = process.env.MONGO_URI;
 
 app.use(cors())
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json())
 
 mongoose
     .connect(url)
@@ -91,7 +92,7 @@ app.get('/work', async (req, res) => {
     try {
         const allUser = await Work.find({})
         res.status(200).send(allUser)
-        console.log(allUser)
+        console.log('showList')
     } catch (err) {
         console.log(err)
         res.status(500).send()
@@ -102,8 +103,47 @@ app.get('/vacation', async (req, res) => {
     try {
         const allUser = await Vacation.find({})
         res.status(200).send(allUser)
-        console.log(allUser)
+        console.log('showList')
     } catch (err) {
+        console.log(err)
+        res.status(500).send()
+    }
+});
+
+app.post('/vacationdelete', async(req, res) => {
+    try {
+        const deleteTask = await Vacation.findByIdAndDelete(req.body._id);
+        res
+            .status(200)
+            .send(deleteTask)
+        console.log('deleted')
+    } catch(err) {
+        console.log(err)
+        res.status(500).send()
+    }
+});
+
+app.post('/workdelete', async(req, res) => {
+    try{
+        const deleteTask = await Work.findByIdAndDelete(req.body._id);
+        res
+            .status(200)
+            .send(deleteTask)
+            console.log('deleted')
+    } catch(err) {
+        console.log(err)
+        res.status(500).send()
+    }
+});
+
+app.post('/homedelete', async(req, res) => {
+    try{
+        const deleteTask = await User.findByIdAndDelete(req.body._id);
+        res
+            .status(200)
+            .send(deleteTask)
+            console.log('deleted')
+    } catch(err) {
         console.log(err)
         res.status(500).send()
     }
